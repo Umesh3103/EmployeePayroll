@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeePayrollFileIOService {
@@ -26,8 +27,7 @@ public class EmployeePayrollFileIOService {
 
 	public void printData() {
 		try {
-			Files.lines(new File(PAYROLL_FILE_NAME).toPath())
-					.forEach(System.out::println);
+			Files.lines(new File(PAYROLL_FILE_NAME).toPath()).forEach(System.out::println);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,14 +35,30 @@ public class EmployeePayrollFileIOService {
 	}
 
 	public long countEntries() {
-		long entries=0;
+		long entries = 0;
 		try {
-			entries = Files.lines(new File(PAYROLL_FILE_NAME).toPath())
-						.count();
+			entries = Files.lines(new File(PAYROLL_FILE_NAME).toPath()).count();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return entries;
+	}
+
+	public List<EmployeePayrollData> readData() {
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		try {
+			Files.lines(new File(PAYROLL_FILE_NAME).toPath()).map(line -> line.trim()).forEach(line -> {
+				line = line.replace(",", "");
+				line = line.replace("=", " ");
+				String[] data = line.split(" ");
+				employeePayrollList.add(new EmployeePayrollData(Integer.parseInt(data[1]), data[3] + " " + data[4],
+						Double.parseDouble(data[6])));
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return employeePayrollList;
 	}
 }
