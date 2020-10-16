@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import com.bridgelabz.employeepayroll.EmployeePayrollService.IOService;
 
+import junit.framework.Assert;
+
 public class EmployeePayrollServiceTest {
 
 	@Test
@@ -16,5 +18,8 @@ public class EmployeePayrollServiceTest {
 		EmployeePayrollService employeePayrollService;
 		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
 		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
+		employeePayrollService.printData(IOService.FILE_IO);
+		long entries = employeePayrollService.countEntries(IOService.FILE_IO);
+		Assert.assertEquals(3, entries);
 	}
 }
